@@ -15,6 +15,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -35,7 +36,8 @@ import com.qa.fundamental.persistence.repository.PhoneBookRepository;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-@Sql(scripts = { "classpath:schema.sql","classpath:data.sql" }, executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
+//@Sql(scripts = { "classpath:schema.sql","classpath:data.sql" }, executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ActiveProfiles(profiles = "test")
 public class PhoneBookControllerIntegrationTests {
 	
@@ -45,22 +47,28 @@ public class PhoneBookControllerIntegrationTests {
 	@Autowired
     private ObjectMapper mapper;
 	
-	private final PhoneBook TEST_CONTACT_SAVED1 = new PhoneBook(1L,"Johnny","Bravo", "12345567", "johnny@bravo.com");
+	private final PhoneBook TEST_CONTACT_SAVED1 = new PhoneBook(1L,"johnny","bravo", "12345567", "johnny@bravo.com");
 	private final PhoneBook TEST_CONTACT_SAVED2 = new PhoneBook(2L,"buttercup","puffgirl","000000000","buttercup@puff.com");
 	private final PhoneBook TEST_CONTACT_SAVED3 = new PhoneBook(3L,"ben","ten","1111111111","ben@ten.com");
 	
 	private final List<PhoneBook> CONTACTS = new ArrayList<PhoneBook>();
 	
-	@BeforeEach
+	@BeforeAll
 	public void setup() throws JsonProcessingException, Exception {
 		this.mockMVC
 			.perform(post("/phonebook/create").contentType(MediaType.APPLICATION_JSON)
 					.content(this.mapper.writeValueAsString(TEST_CONTACT_SAVED1)));	
+		this.mockMVC
+		.perform(post("/phonebook/create").contentType(MediaType.APPLICATION_JSON)
+				.content(this.mapper.writeValueAsString(TEST_CONTACT_SAVED2)));	
+		this.mockMVC
+		.perform(post("/phonebook/create").contentType(MediaType.APPLICATION_JSON)
+				.content(this.mapper.writeValueAsString(TEST_CONTACT_SAVED3)));	
+		
 	}
 
 	@Test
 	public void testCreate() throws JsonProcessingException, Exception {
-		System.out.println("\nIn create test");
 		 this.mockMVC
 			.perform(post("/phonebook/create").contentType(MediaType.APPLICATION_JSON)
 					.content(this.mapper.writeValueAsString(TEST_CONTACT_SAVED1)))
@@ -69,8 +77,6 @@ public class PhoneBookControllerIntegrationTests {
 	
 	@Test
 	public void testReadById() throws Exception {
-		System.out.println("\nIn read id test");
-		
 		this.mockMVC
 		.perform(get("/phonebook/read/id/1").accept(MediaType.APPLICATION_JSON))
 		.andExpect(status().isOk())
@@ -80,17 +86,9 @@ public class PhoneBookControllerIntegrationTests {
 	
 	@Test
 	public void testReadAll() throws Exception {
-		System.out.println("\nIn read all test");
 		CONTACTS.add(TEST_CONTACT_SAVED1);
 		CONTACTS.add(TEST_CONTACT_SAVED2);
 		CONTACTS.add(TEST_CONTACT_SAVED3);
-		
-//        final String resultString = this.mockMVC
-//                .perform(request(HttpMethod.GET, "/phonebook/readAll").accept(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
-//
-//        List<PhoneBook> results = Arrays.asList(mapper.readValue(resultString, PhoneBook[].class));
-//        assertThat(results).contains(this.TEST_CONTACT_SAVED1).hasSize(3);
 		
 		this.mockMVC.perform(get("/phonebook/readAll").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
         .andExpect(content().json(this.mapper
@@ -99,24 +97,21 @@ public class PhoneBookControllerIntegrationTests {
 	
 	@Test
 	public void testReadByNum() throws Exception {
-		System.out.println("\nIn read by num test");
-
-		this.mockMVC.perform(get("/phonebook/read/num/12345567")).andExpect(status().isOk())
+		this.mockMVC.perform(get("/phonebook/read/phone/12345567")).andExpect(status().isOk())
         .andExpect(content().json(this.mapper.writeValueAsString(TEST_CONTACT_SAVED1)));
 	}
 	
 	@Test
 	public void testReadByName() throws Exception {
-		System.out.println("\nIn read by name test");
+		List<PhoneBook> johnny = new ArrayList<PhoneBook>();
+		johnny.add(TEST_CONTACT_SAVED1);
 
-		this.mockMVC.perform(get("/phonebook/read/name/Johnny")).andExpect(status().isOk())
-        .andExpect(content().json(this.mapper.writeValueAsString(TEST_CONTACT_SAVED1)));
+		this.mockMVC.perform(get("/phonebook/read/name/johnny")).andExpect(status().isOk())
+        .andExpect(content().json(this.mapper.writeValueAsString(johnny)));
 	}
 	
 	@Test
 	public void testReadByEmail() throws Exception {
-		System.out.println("\nIn read by email test");
-
 		this.mockMVC.perform(get("/phonebook/read/email/johnny@bravo.com")).andExpect(status().isOk())
         .andExpect(content().json(this.mapper.writeValueAsString(TEST_CONTACT_SAVED1)));
 	}
