@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS phonebook;
+CREATE TABLE IF NOT EXISTS phonebook (id INT AUTO_INCREMENT, first_name VARCHAR(50), last_name VARCHAR(50), phone_number VARCHAR(15) , email VARCHAR(100), PRIMARY KEY (id));
