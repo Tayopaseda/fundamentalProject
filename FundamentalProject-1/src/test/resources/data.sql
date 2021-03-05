@@ -1,0 +1,3 @@
+INSERT INTO `phonebook` (`first_name`, `last_name`, `phone_number`, `email`) VALUES ('Johnny','Bravo','12345567','johnny@bravo.com');
+INSERT INTO `phonebook` (`first_name`, `last_name`, `phone_number`, `email`) VALUES ('buttercup','puffgirl','000000000','buttercup@puff.com');
+INSERT INTO `phonebook` (`first_name`, `last_name`, `phone_number`, `email`) VALUES ('ben','ten','1111111111','ben@ten.com');
