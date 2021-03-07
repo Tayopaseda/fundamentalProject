@@ -52,7 +52,6 @@ public class PhoneBookControllerIntegrationTests {
 	private final PhoneBook TEST_CONTACT_SAVED1 = new PhoneBook(1L,"johnny","bravo", "12345567", "johnny@bravo.com");
 	private final PhoneBook TEST_CONTACT_SAVED2 = new PhoneBook(2L,"buttercup","puffgirl","000000000","buttercup@puff.com");
 	private final PhoneBook TEST_CONTACT_SAVED3 = new PhoneBook(3L,"ben","ten","1111111111","ben@ten.com");
-	//private final PhoneBook TEST = new PhoneBook(4L,"testing", "testasaurus", "1010", "testing@test.net");
 	
 	
 	private final List<PhoneBook> CONTACTS = new ArrayList<PhoneBook>();
