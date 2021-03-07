@@ -46,18 +46,7 @@ public class PhoneBookService {
 	public PhoneBook readByEmail(String email) {
 		return this.repo.findContactByEmail(email);
 	}
-	
-//	public PhoneBook updateById(Long id, PhoneBook contact) {
-//		Optional<PhoneBook> op = this.repo.findById(id);
-//		PhoneBook old = op.get();
-//		old.setFirst_name(contact.getFirst_name());
-//		old.setLast_name(contact.getLast_name());
-//		old.setPhone_number(contact.getPhone_number());
-//		old.setEmail(contact.getEmail());
-//		
-//		return this.repo.save(old);	
-//	}
-//	
+		
 	public PhoneBook updateNumById(Long id, String num) {
 		Optional<PhoneBook> op = this.repo.findById(id);
 		PhoneBook old = op.get();

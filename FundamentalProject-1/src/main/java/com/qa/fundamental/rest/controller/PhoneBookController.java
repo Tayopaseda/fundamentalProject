@@ -94,15 +94,6 @@ public class PhoneBookController {
 	}
 	
 	/*
-	 * Update by ID
-	 */
-//	@PutMapping("/update/{id}")
-//	public ResponseEntity<PhoneBook> updateById(@PathVariable Long id, @RequestBody PhoneBook contact) {
-//		PhoneBook new_contact = this.service.updateById(id, contact);
-//		return new ResponseEntity<PhoneBook>(new_contact, HttpStatus.ACCEPTED);
-//	}
-	
-	/*
 	 * Update phone number by ID
 	 */
 	
